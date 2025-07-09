@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lotto Winner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 30px;
+        }
+        button, select {
+            font-size: 16px;
+            padding: 8px 12px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            background-color: white;
+            cursor: pointer;
+        }
+        select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="blue" height="18" viewBox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            padding-right: 30px;
+        }
+        .ball {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .yellow { background-color: #fbc02d; }
+        .blue { background-color: #29b6f6; }
+        .red { background-color: #ef5350; }
+        .gray { background-color: #9e9e9e; }
+        .green { background-color: #66bb6a; }
+        .section {
+            margin: 20px 0;
+        }
+        .control-group {
+            display: inline-block;
+            margin: 10px;
+        }
+        .reset-button {
+            background-color: #03C75A;
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function getColorClass(number) {
+            if (number <= 10) return 'yellow';
+            if (number <= 20) return 'blue';
+            if (number <= 30) return 'red';
+            if (number <= 40) return 'gray';
+            return 'green';
+        }
+
+        function renderBalls(numbers, label) {
+            const section = document.createElement('div');
+            section.className = 'section';
+            numbers.forEach(num => {
+                const ball = document.createElement('div');
+                ball.className = 'ball ' + getColorClass(num);
+                ball.textContent = num;
+                section.appendChild(ball);
+            });
+            const tag = document.createElement('p');
+            tag.textContent = label;
+            section.appendChild(tag);
+            document.getElementById('result').appendChild(section);
+        }
+
+        async function generate(type, selectId, label) {
+            const count = parseInt(document.getElementById(selectId).value);
+            if (count === 0) return;
+
+            const response = await fetch(`/generate_multiple?type=${type}&count=${count}`);
+            const data = await response.json();
+            data.results.forEach((nums, idx) =>
+                renderBalls(nums, `${label} - No.${idx + 1}`)
+            );
+        }
+
+        function clearResults() {
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('hybridCount').value = '0';
+            document.getElementById('smartCount').value = '0';
+            document.getElementById('aiCount').value = '0';
+        }
+
+        window.onload = function () {
+            clearResults();
+        }
+    </script>
+</head>
+<body>
+    <h1>Lotto Winner 🎉</h1>
+
+    <div>
+        <div class="control-group">
+            <select id="hybridCount">
+                <option value="0">0게임</option>
+                <option value="1">1게임</option>
+                <option value="2">2게임</option>
+                <option value="3">3게임</option>
+                <option value="4">4게임</option>
+                <option value="5">5게임</option>
+            </select><br>
+            <button onclick="generate('hybrid', 'hybridCount', '하이브리드 추천')">하이브리드 추천</button>
+        </div>
+
+        <div class="control-group">
+            <select id="smartCount">
+                <option value="0">0게임</option>
+                <option value="1">1게임</option>
+                <option value="2">2게임</option>
+                <option value="3">3게임</option>
+                <option value="4">4게임</option>
+                <option value="5">5게임</option>
+            </select><br>
+            <button onclick="generate('smart', 'smartCount', '스마트 추천')">스마트 추천</button>
+        </div>
+
+        <div class="control-group">
+            <select id="aiCount">
+                <option value="0">0게임</option>
+                <option value="1">1게임</option>
+                <option value="2">2게임</option>
+                <option value="3">3게임</option>
+                <option value="4">4게임</option>
+                <option value="5">5게임</option>
+            </select><br>
+            <button onclick="generate('ai', 'aiCount', 'AI 통합 추천')">AI 통합 추천</button>
+        </div>
+
+        <div class="control-group">
+            <button class="reset-button" onclick="clearResults()">초기화</button>
+        </div>
+    </div>
+
+    <div id="result"></div>
+</body>
+</html>
+
+
+
+
+
