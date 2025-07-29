@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>시뮬레이션 결과</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+        }
+        .summary {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 60%;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 시뮬레이션 결과</h1>
+
+    {% if result %}
+        <div class="summary">
+            <p><strong>총 시도 횟수:</strong> {{ result.total }}</p>
+            <p><strong>평균 등수:</strong> {{ result.average_rank }}</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>등수</th>
+                    <th>출현 횟수</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rank in ['1등', '2등', '3등', '4등', '5등', '꽝'] %}
+                    <tr>
+                        <td>{{ rank }}</td>
+                        <td>{{ result.counts.get(rank, 0) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="text-align:center; color:red;">❌ 시뮬레이션 데이터를 불러올 수 없습니다.</p>
+    {% endif %}
+
+    <div style="text-align:center;">
+        <a href="/">← 메인으로 돌아가기</a>
+    </div>
+</body>
+</html>
+

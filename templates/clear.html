@@ -1,0 +1,67 @@
+<!-- templates/clear.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>추천 기록 초기화</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            padding: 40px;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        form {
+            display: inline-block;
+            margin-top: 30px;
+        }
+        input[type="password"] {
+            padding: 12px;
+            width: 250px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔒 추천 기록 초기화</h1>
+    <p>비밀번호를 입력해야 초기화할 수 있어요.</p>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <input type="password" name="password" placeholder="비밀번호 6자리 입력" required><br>
+        <input type="submit" value="초기화 진행">
+    </form>
+
+    <a href="/results">← 추천 결과로 돌아가기</a>
+</body>
+</html>
+
+
+

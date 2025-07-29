@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>추천 결과</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        .rank-1 { background-color: #ffcccc; font-weight: bold; }
+        .rank-2 { background-color: #ffe5cc; font-weight: bold; }
+        .rank-3 { background-color: #fff0b3; font-weight: bold; }
+        .rank-4 { background-color: #e0f7fa; font-weight: bold; }
+        .rank-5 { background-color: #e0ffe0; font-weight: bold; }
+        .rank-낙첨 { color: #bbb; }
+        .rank-미추첨 { color: #999; font-style: italic; }
+        .rank-정보없음 { color: #aaa; font-style: italic; }
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .button-group a {
+            text-decoration: none;
+            color: white;
+            background-color: #333;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .warning {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>추천 결과 보기</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>회차</th>
+                <th>추천번호</th>
+                <th>추천방식</th>
+                <th>등수</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in results %}
+            <tr class="rank-{{ item.rank }}">
+                <td>{{ item.round }}</td>
+                <td title="{{ item.reason }}">{{ item.numbers | join(', ') }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.rank }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="button-group">
+        <a href="/">← 메인으로 돌아가기</a>
+        <a href="/clear">🗑 기록 초기화</a>
+        <div class="warning">※ 초기화 시 모든 추천 기록이 완전히 삭제됩니다!</div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+

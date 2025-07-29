@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 추천 통계</title>
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f9f9f9;
+      padding: 30px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-decoration: none;
+      font-size: 20px;
+      background-color: #eee;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+    .stats-table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 90%;
+    }
+    .stats-table th,
+    .stats-table td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    .stats-table th {
+      background-color: #f0f0f0;
+    }
+    .method-title {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      font-size: 1.4em;
+      color: #333;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="back-button" title="메인으로">🏠</a>
+  <h1>📊 추천 통계 요약</h1>
+
+  {% if stats %}
+    {% for method, counts in stats.items() %}
+      <div class="method-title">{{ method | upper }} 추천</div>
+      <table class="stats-table">
+        <thead>
+          <tr>
+            <th>등수</th>
+            <th>횟수</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rank, count in counts.items() %}
+            <tr>
+              <td>{{ rank }}</td>
+              <td>{{ count }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+  {% else %}
+    <p style="text-align:center;">기록된 추천 데이터가 없습니다.</p>
+  {% endif %}
+</body>
+</html>
