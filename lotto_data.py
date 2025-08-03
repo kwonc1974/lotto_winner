@@ -1,6 +1,7 @@
 import json
 import random
 import os
+import re
 from datetime import datetime
 from collections import Counter, defaultdict
 
@@ -28,13 +29,12 @@ def is_valid(numbers):
         return False
     return True
 
-# ✅ 출현율 기반 하이브리드 추천
 def generate_hybrid_lotto():
     freq_counter = get_number_frequencies(n=100)
     top_20 = [num for num, _ in freq_counter.most_common(20)]
 
     if len(top_20) < 3:
-        top_20 = [1, 3, 7, 10, 13, 17, 23, 27, 33, 38, 40, 44]  # fallback
+        top_20 = [1, 3, 7, 10, 13, 17, 23, 27, 33, 38, 40, 44]
 
     selected_hot = random.sample(top_20, 3)
     remaining_pool = list(set(range(1, 46)) - set(selected_hot))
@@ -57,13 +57,12 @@ def generate_smart_lotto():
                 "date": datetime.now().strftime("%Y-%m-%d")
             }
 
-# ✅ 출현율 기반 AI 추천
 def generate_ai_lotto():
     freq_counter = get_number_frequencies(n=200)
     top_30 = [num for num, _ in freq_counter.most_common(30)]
 
     if len(top_30) < 4:
-        top_30 = [1, 3, 7, 10, 13, 17, 23, 27, 33, 38, 40, 44]  # fallback
+        top_30 = [1, 3, 7, 10, 13, 17, 23, 27, 33, 38, 40, 44]
 
     while True:
         selected_hot = random.sample(top_30, 4)
@@ -154,10 +153,24 @@ def get_result_rank(winning, candidate):
         return "낙첨"
 
 def fetch_latest_winning_numbers():
+    import requests
+    from bs4 import BeautifulSoup
+
+    url = 'https://dhlottery.co.kr/gameResult.do?method=byWin'
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    round_tag = soup.select_one(".win_result h4 strong")
+    round_text = round_tag.text if round_tag else "0"
+    round_num = int(re.sub(r'\D', '', round_text))
+
+    numbers = [int(tag.text) for tag in soup.select('.num.win span')]
+    bonus = int(soup.select_one('.bonus span').text)
+
     return {
-        "draw_no": 1181,
-        "numbers": [8, 10, 14, 20, 33, 41],
-        "bonus": 28
+        "draw_no": round_num,
+        "numbers": numbers,
+        "bonus": bonus
     }
 
 def run_simulation(n=1000):
@@ -201,7 +214,6 @@ def summarize_statistics():
         stats[method][rank] += 1
     return stats
 
-# ✅ 출현 빈도 계산 함수
 def get_number_frequencies(n=100):
     history = load_recommendation_history()
     history = sorted(history, key=lambda x: x.get("round", 0), reverse=True)[:n]
@@ -212,6 +224,8 @@ def get_number_frequencies(n=100):
         counter.update(numbers)
 
     return counter
+
+
 
 
 
