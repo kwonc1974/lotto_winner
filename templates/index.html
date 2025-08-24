@@ -58,14 +58,8 @@
         .gray { background-color: #9e9e9e; }
         .green { background-color: #66bb6a; }
 
-        .section {
-            margin: 20px 0;
-        }
-
-        .control-group {
-            display: inline-block;
-            margin: 10px;
-        }
+        .section { margin: 20px 0; }
+        .control-group { display: inline-block; margin: 10px; }
 
         .reset-button {
             background-color: #03C75A;
@@ -98,23 +92,22 @@
             document.getElementById('result').appendChild(section);
         }
 
-        async function generate(type, selectId, label) {
-            const count = parseInt(document.getElementById(selectId).value);
-            if (count === 0) return;
+        async function generateUnified() {
+            const count = parseInt(document.getElementById('ultraCount').value);
+            if (!count) return;
 
-            const response = await fetch(`/generate_multiple?type=${type}&count=${count}`);
+            // 백엔드에서 'ultra' 타입을 처리하도록 다음 단계에서 연결해줄게
+            const response = await fetch(`/generate_multiple?type=ultra&count=${count}`);
             const data = await response.json();
 
-            data.results.forEach((item, idx) =>
-                renderBalls(item.numbers, `${label} - No.${idx + 1}`)
-            );
+            data.results.forEach((item, idx) => {
+                renderBalls(item.numbers, `AI 통합 추천 - No.${idx + 1}`);
+            });
         }
 
         function clearResults() {
             document.getElementById('result').innerHTML = '';
-            document.getElementById('hybridCount').value = '0';
-            document.getElementById('smartCount').value = '0';
-            document.getElementById('aiCount').value = '0';
+            document.getElementById('ultraCount').value = '0';
         }
 
         window.onload = function () {
@@ -124,7 +117,7 @@
 </head>
 <body>
 
-    <!-- 상단 아이콘 -->
+    <!-- 상단 아이콘 (그대로) -->
     <a href="/results" class="settings-icon" title="결과 확인">⚙️</a>
     <a href="/simulation" class="simulation-icon" title="시뮬레이션 결과">🎯</a>
     <a href="/stats" class="stats-icon" title="추천 통계">📊</a>
@@ -132,40 +125,22 @@
     <h1>Lotto Winner 🎉</h1>
 
     <div>
+        <!-- ✅ 버튼 하나로 통합 / 0~10게임 선택 -->
         <div class="control-group">
-            <select id="hybridCount">
+            <select id="ultraCount">
                 <option value="0">0게임</option>
                 <option value="1">1게임</option>
                 <option value="2">2게임</option>
                 <option value="3">3게임</option>
                 <option value="4">4게임</option>
                 <option value="5">5게임</option>
+                <option value="6">6게임</option>
+                <option value="7">7게임</option>
+                <option value="8">8게임</option>
+                <option value="9">9게임</option>
+                <option value="10">10게임</option>
             </select><br>
-            <button onclick="generate('hybrid', 'hybridCount', '하이브리드 추천')">하이브리드 추천</button>
-        </div>
-
-        <div class="control-group">
-            <select id="smartCount">
-                <option value="0">0게임</option>
-                <option value="1">1게임</option>
-                <option value="2">2게임</option>
-                <option value="3">3게임</option>
-                <option value="4">4게임</option>
-                <option value="5">5게임</option>
-            </select><br>
-            <button onclick="generate('smart', 'smartCount', '스마트 추천')">스마트 추천</button>
-        </div>
-
-        <div class="control-group">
-            <select id="aiCount">
-                <option value="0">0게임</option>
-                <option value="1">1게임</option>
-                <option value="2">2게임</option>
-                <option value="3">3게임</option>
-                <option value="4">4게임</option>
-                <option value="5">5게임</option>
-            </select><br>
-            <button onclick="generate('ai', 'aiCount', 'AI 통합 추천')">AI 통합 추천</button>
+            <button onclick="generateUnified()">AI 통합 추천</button>
         </div>
 
         <div class="control-group">
@@ -176,6 +151,7 @@
     <div id="result"></div>
 </body>
 </html>
+
 
 
 
